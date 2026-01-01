@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# gitリポジトリのルートを取得（失敗したら現在地）
+ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
+CARTDIR="$ROOT/pico8"
+
+# PICO-8本体（必要ならここだけ環境に合わせて変更）
+PICO8_BIN="/Applications/PICO-8.app/Contents/MacOS/pico8"
+
+if [[ ! -x "$PICO8_BIN" ]]; then
+  echo "PICO-8が見つかりません: $PICO8_BIN" >&2
+  echo "PICO-8.appが/Applicationsにあるか確認してください。" >&2
+  exit 1
+fi
+
+mkdir -p "$CARTDIR"
+
+# 引数があればそのカートを -run で実行（例: ./tools/pico8 mygame.p8）
+# なければエディタ起動のみ
+if [[ $# -ge 1 ]]; then
+  exec "$PICO8_BIN" -root_path "$CARTDIR" -run "$1"
+else
+  exec "$PICO8_BIN" -root_path "$CARTDIR"
+fi

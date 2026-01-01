@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+set -euo pipefail
+PICOTRON_BIN="/Applications/Picotron.app/Contents/MacOS/picotron"
+
+if [[ ! -x "$PICOTRON_BIN" ]]; then
+  echo "Picotronが見つかりません: $PICOTRON_BIN" >&2
+  exit 1
+fi
+
+exec "$PICOTRON_BIN"
